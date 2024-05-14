@@ -1,0 +1,77 @@
+﻿@using LaptopShop2.Models;
+@model IList<TbMenuAdmin>
+
+<style>
+    .submenu {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-in-out;
+    }
+
+    .nav-small-cap.active .submenu {
+        display: block;
+        max-height: 1000px;
+    }
+
+    .nav-small-cap .nav-small-cap-icon {
+        display: inline-block;
+        float: right;
+    }
+
+    .nav-small-cap.active .nav-small-cap-icon:before {
+        content: '\002B'; /* Dấu - */
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .nav-small-cap .nav-small-cap-icon:before {
+        content: '\002D'; /* Dấu + */
+        transform: rotate(45deg); /* Quay biểu tượng khi được click */
+    }
+</style>
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+            <a href="./home" class="text-nowrap logo-img">
+                <img src="~/assets/img/logo.png" width="180" alt="" />
+            </a>
+            <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+                <i class="ti ti-x fs-8"></i>
+            </div>
+        </div>
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+            <ul id="sidebarnav">
+                @foreach (var Item in Model.Where(m => m.ItemLevel == 1).OrderBy(n => n.ItemOrder))
+                {
+                    var Pid = Item.MenuAdminId;
+                    var sMenu = Model.Where(p => p.ParentId == Pid).OrderBy(p => p.ItemOrder).ToList();
+
+                    <li class="nav-small-cap" style="cursor: pointer;padding-right: 3px;">
+
+                        <p href="#" class="hide-menu">
+                            @Item.ItemName
+                            <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                        </p>
+
+                        <ul class="submenu">
+                            @foreach (var sMn in sMenu)
+                            {
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="/@sMn.AreaName/@sMn.ControllerName/@sMn.ActionName" aria-expanded="false">
+                                        <span>
+                                            <i class="@sMn.Icon"></i>
+                                        </span>
+                                        <span class="hide-menu fw-semibold">@sMn.ItemName</span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>
