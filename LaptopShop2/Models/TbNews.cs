@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaptopShop2.Models;
 
@@ -26,4 +27,6 @@ public partial class TbNews
     public bool IsActive { get; set; }
 
     public virtual TbCategoryNew? CategoryNew { get; set; }
+    [NotMapped]
+    public string? CategoryInput {  get; set; }
 }

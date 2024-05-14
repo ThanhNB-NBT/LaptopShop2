@@ -90,8 +90,8 @@
             height: 450,
             destroyOnClose: true,
             closeOnEditorCallback: true,
-            getFileCallback: function (files) {
-                document.getElementById(getInput).value = files.url;
+            getFileCallback: function (files, fm) {
+                document.getElementById('file_input').value = files.url;
             },
             commandsOptions: {
                 getfile: {

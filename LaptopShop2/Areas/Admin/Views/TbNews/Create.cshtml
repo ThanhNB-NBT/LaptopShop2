@@ -1,0 +1,86 @@
+﻿@model LaptopShop2.Models.TbNews
+
+@{
+    ViewData["Title"] = "Thêm tin tức";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Thêm tin tức</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Title" class="control-label form-label">Tiêu đề</label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Description" class="control-label form-label">Mô tả</label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Detail" class="control-label form-label">Nội dung</label>
+                                <textarea asp-for="Detail" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Image" class="control-label form-label form-label form-label">Hình ảnh</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="btn btn-success m-1 form-label" onclick="openDialog('file_input')">Chọn hình ảnh</button>
+                                    </div>
+                                    <!-- /btn-group -->
+                                    <input type="text" class="form-control " id="file_input" asp-for="Image" aria-describedby="button-addon2">
+                                </div>
+                                <span asp-validation-for="Image" class="text-danger"></span>
+                            </div>
+                            <div class="form-group  mb-3">
+                                <label asp-for="CreatedDate" class="control-label form-label">Ngày tạo</label>
+                                <input asp-for="CreatedDate" class="form-control" />
+                                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="CreatedBy" class="control-label form-label">Người tạo</label>
+                                <input asp-for="CreatedBy" class="form-control" />
+                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Tags" class="control-label form-label"></label>
+                                <input asp-for="Tags" class="form-control" />
+                                <span asp-validation-for="Tags" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3 form-check form-switch bottom-0 fw-semibold">
+                                <input class="form-check-input" type="checkbox" asp-for="IsActive" />Hiển thị
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="CategoryNewId" class="control-label form-label">Chọn hoặc nhập danh mục</label>
+                                <input type="text" asp-for="CategoryNewId" name="categoryInput" id="categoryInput" list="Category" class="form-control" />
+                                <datalist id="Category">
+                                    @foreach (var item in (IEnumerable<SelectListItem>)ViewData["CategoryNewId"])
+                                    {
+                                        <option value="@item.Text"></option>
+                                    }
+                                </datalist>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="submit" value="Thêm mới" class="btn btn-primary" /> |
+                                <a asp-action="Index" type="button" class="btn btn-outline-primary m-1">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    var summerNote = new LaptopShop2.Areas.Admin.Models.SummerNote("#Detail");
+}
+<partial name="_SummerNote" model="summerNote" />
