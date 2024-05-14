@@ -1,0 +1,90 @@
+﻿@model LaptopShop2.Models.TbMenu
+
+@{
+    ViewData["Title"] = "Chi tiết ";
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Chi tiết: @Model.MenuName</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>@Model.MenuName</h4>
+                        <dl class="row">
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Menu:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @Html.DisplayFor(model => model.MenuName)
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Hiển thị:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="text-success">Có</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Không</span>
+                                }
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Controller:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @Html.DisplayFor(model => model.ControllerName)
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Action:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @Html.DisplayFor(model => model.ActionName)
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Cấp:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @Html.DisplayFor(model => model.MenuLevel)
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                Mã cha:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0 ">
+                                @{
+                                    if (Model.ParentId == null || Model.ParentId == 0)
+                                    {
+                                        <text>Không có</text>
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => Model.ParentName)
+                                    }
+                                }
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0 ">
+                                Thứ tự:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0 ">
+                                @Html.DisplayFor(model => model.MenuOrder)
+                            </dd>
+                            <dt class="col-sm-2 fw-semibold border-bottom-0 ">
+                                Vị trí
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0 ">
+                                @Html.DisplayFor(model => model.Position)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model?.MenuId" class="btn btn-danger btn-edit m-1">Sửa</a> |
+                    <a asp-action="Index" type="button" class="btn btn-outline-primary m-1">Quay lại</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

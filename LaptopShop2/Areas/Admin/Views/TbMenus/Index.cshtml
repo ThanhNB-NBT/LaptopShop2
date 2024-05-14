@@ -1,0 +1,176 @@
+﻿@model IPagedList<LaptopShop2.Models.TbMenu>
+
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Menu";
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="d-flex align-items-stretch">
+            <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Quản lý Menu</h5>
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div id="successAlert" class="alert alert-success">
+                            @successMessage
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div id="errorAlert" class="alert alert-danger">
+                            @errorMessage
+                        </div>
+                    }
+                    <p>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <p>
+                                    <a asp-action="Create" class="btn btn-primary mb-3">Thêm mới</a>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <form method="get" action="@Url.Action("Index")" class="form-inline float-end">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="searchString" placeholder="Nhập từ khóa...">
+                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table text-nowrap mb-0 align-middle">
+                                <thead class="text-dark fs-4">
+                                    <tr>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">STT</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Menu</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Hiển thị</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Controller</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Action</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Cấp</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Cấp trên</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Thứ tự</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Vị trí</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Chức năng</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@(i++)</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.MenuName</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    @if (@item.IsActive)
+                                                    {
+                                                        <span class="badge bg-secondary rounded-3 fw-semibold">Có</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">Không</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.ControllerName</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.ActionName</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.MenuLevel</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">
+                                                    @{
+                                                        if (item.ParentId == null || item.ParentId == 0)
+                                                        {
+                                                            <text>Không có</text>
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.DisplayFor(modelItem => item.ParentName)
+                                                        }
+                                                    }
+                                                </h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.MenuOrder</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.Position</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <a asp-action="Edit" asp-route-id="@item.MenuId" class="btn btn-danger btn-sm btn-edit">Sửa</a> |
+                                                <a asp-action="Details" asp-route-id="@item.MenuId" class="btn btn-info btn-sm btn-detail">Chi tiết</a> |
+                                                @*  <a asp-action="Delete" asp-route-id="@item.MenuId" data-id="@item.MenuId" confirmDelete="@item.MenuId" class="btn btn-warning btn-sm btn-delete">Xóa</a> *@
+                                                <a href="#" class="btn btn-warning btn-sm btn-delete" data-id="@item.MenuId">Xóa</a>
+                                                <!-- Form ẩn để thực hiện hành động xóa -->
+                                                <form id="deleteForm-@item.MenuId" method="post" action="@Url.Action("Delete", "TbMenus", new { id = item.MenuId })" style="display: none;">
+                                                    @Html.AntiForgeryToken()
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="pagination">
+                                @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded, LiElementClasses = new[] { "page-link" } })
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".btn-delete").click(function (e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+                var menuId = $(this).data("id");
+                if (confirm("Bạn có chắc chắn muốn xóa?")) {
+                    $("#deleteForm-" + menuId).submit(); // Nộp form ẩn tương ứng
+                }
+            });
+        });
+    </script>
+}
+
+

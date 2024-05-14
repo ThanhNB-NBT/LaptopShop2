@@ -1,0 +1,66 @@
+﻿@model LaptopShop2.Models.TbMenu
+
+@{
+    ViewData["Title"] = "Thêm mới Menu";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Thêm mới Menu</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group mb-3">
+                                <label asp-for="MenuName" class="control-label form-label">Menu</label>
+                                <input asp-for="MenuName" class="form-control" />
+                                <span asp-validation-for="MenuName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="ControllerName" class="control-label form-label">Controller</label>
+                                <input asp-for="ControllerName" class="form-control" />
+                                <span asp-validation-for="ControllerName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="ActionName" class="control-label form-label">Action</label>
+                                <input asp-for="ActionName" class="form-control" />
+                                <span asp-validation-for="ActionName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="MenuLevel" class="control-label form-label">Cấp</label>
+                                <input asp-for="MenuLevel" class="form-control" />
+                                <span asp-validation-for="MenuLevel" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="ParentId" class="control-label form-label">Mã cấp trên</label>
+                                <select asp-for="ParentId" asp-items="@(ViewBag.ParentMenus)" class="form-control">
+                                    <option value="0">-- Chọn cấp trên --</option>
+                                </select>
+                                <span asp-validation-for="ParentId" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="MenuOrder" class="control-label form-label">Thứ tự</label>
+                                <input asp-for="MenuOrder" class="form-control" />
+                                <span asp-validation-for="MenuOrder" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="Position" class="control-label form-label">Vị trí</label>
+                                <input asp-for="Position" class="form-control" />
+                                <span asp-validation-for="Position" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3 form-check form-switch bottom-0 fw-semibold">
+                                <input class="form-check-input" type="checkbox" asp-for="IsActive" />Hiển thị
+                            </div>
+                            <div class="form-group mb-3">
+                                <input type="submit" value="Thêm mới" class="btn btn-primary" />
+                                <a asp-action="Index" type="button" class="btn btn-outline-primary m-1">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
