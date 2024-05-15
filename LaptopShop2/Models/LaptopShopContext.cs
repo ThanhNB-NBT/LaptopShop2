@@ -242,6 +242,7 @@ public partial class LaptopShopContext : DbContext
             entity.ToTable("TbProduct");
 
             entity.Property(e => e.Bluetooth).HasMaxLength(50);
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.CardBrand).HasMaxLength(50);
             entity.Property(e => e.CardModel).HasMaxLength(50);
             entity.Property(e => e.Code).HasMaxLength(250);

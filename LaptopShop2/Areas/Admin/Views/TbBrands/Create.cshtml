@@ -1,0 +1,56 @@
+﻿@model LaptopShop2.Models.TbBrand
+
+@{
+    ViewData["Title"] = "Thêm thương hiệu";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Thêm thương hiệu</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <form asp-action="Create">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Name" class="control-label form-label">Thương hiệu</label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="Banner" class="control-label form-label form-label form-label">Banner</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="btn btn-success m-1 form-label" onclick="openDialog('file_input')">Chọn hình ảnh</button>
+                                    </div>
+                                    <!-- /btn-group -->
+                                    <input type="text" class="form-control " id="file_input" asp-for="Banner" aria-describedby="button-addon2">
+                                </div>
+                                <span asp-validation-for="Banner" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="form-group mb-3">
+                                <label asp-for="Description" class="control-label form-label">Mô tả</label>
+                                <input asp-for="Description" class="form-control" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <input type="submit" value="Thêm mới" class="btn btn-primary" /> |
+                                <a asp-action="Index" type="button" class="btn btn-outline-primary m-1">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    var summerNote = new LaptopShop2.Areas.Admin.Models.SummerNote("");
+}
+<partial name="_SummerNote" model="summerNote" />

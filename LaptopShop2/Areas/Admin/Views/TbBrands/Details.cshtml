@@ -1,0 +1,51 @@
+﻿@model LaptopShop2.Models.TbBrand
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Chi tiết: @Model.Name</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class = "col-sm-2 fw-semibold border-bottom-0">
+                                Thương hiệu:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @Html.DisplayFor(model => model.Name)
+                            </dd>
+                            <dt class = "col-sm-2 fw-semibold border-bottom-0">
+                                Banner:
+                            </dt>
+                            <dd class = "col-sm-10">
+                                @Html.DisplayFor(model => model.Banner)
+                            </dd>
+                            <dt class = "col-sm-2 fw-semibold border-bottom-0">
+                                Mô tả:
+                            </dt>
+                            <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                @if(Model.Description == null)
+                                {
+                                    <span class="fw-semibold">Không</span>
+                                } 
+                                else
+                                {
+                                    <span class="fw-semibold"> @Model.Description</span>
+                                }
+                            </dd>
+                        </dl>
+                        <div>
+                            <a class="btn btn-danger m-1" asp-action="Edit" asp-route-id="@Model?.BrandId">Edit</a> |
+                            <a class="btn btn-outline-primary m-1" asp-action="Index">Quay lại</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LaptopShop2.Models;
 
@@ -14,6 +15,8 @@ public partial class TbProduct
     public string? Detail { get; set; }
 
     public string? Image { get; set; }
+
+    public DateTime? CreatedDate { get; set; }
 
     public decimal? Price { get; set; }
 
@@ -102,4 +105,7 @@ public partial class TbProduct
     public virtual ICollection<TbOrderDetail> TbOrderDetails { get; set; } = new List<TbOrderDetail>();
 
     public virtual ICollection<TbProductReview> TbProductReviews { get; set; } = new List<TbProductReview>();
+
+    [NotMapped]
+    public string? CategoryInput { get; set; }
 }
