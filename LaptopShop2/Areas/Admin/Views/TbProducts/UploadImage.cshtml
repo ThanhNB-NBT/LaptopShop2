@@ -1,0 +1,164 @@
+﻿@model LaptopShop2.Areas.Admin.Controllers.TbProductsController.UploadOneFile
+
+@{
+    TbProduct product = ViewData["product"] as TbProduct;
+    ViewData["Title"] = "Thêm ảnh sản phẩm";
+}
+
+<style>
+    .photo-upload {
+        justify-content: space-between;
+    }
+
+    .photoDetail {
+        position: relative;
+        span:
+
+    {
+        position: absolute;
+        display: none;
+        bottom: 10px; /* Điều chỉnh vị trí */
+        right: 10px; /* Điều chỉnh vị trí */
+        background-color: #rgb(tomato);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    &:hover {
+        span
+
+    {
+        display: block;
+    }
+
+    }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Sản phẩm: @product.ProductName</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label asp-for="@Model.FileUpload" class="control-label fw-semibold mb-4">Chọn hình ảnh</label>
+                                <input asp-for="@Model.FileUpload" class="form-control">
+                                <span asp-validation-for="@Model.FileUpload" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mt-3">
+                                <button type="submit" class="btn btn-primary" asp-action="UploadImage" asp-route-id="@product.ProductId">Upload</button>
+                            </div>
+                        </form>
+                        <h5 class="card-title mt-3 fw-semibold"> Hình ảnh</h5>
+                        <hr />
+                        <input class="collapse"
+                               type="file"
+                               id="selectFileUpload"
+                               onchange="AutoUploadImage()" />
+                        <span class="btn btn-primary mt-3" onclick="ClickButtonUpload()">Upload hình ảnh</span>
+                        <div id="box-photo-upload" data-id="@product.ProductId" class="d-flex flex-wrap photo-upload">
+                            @*Function LoadImages*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function AutoUploadImage() {
+            var formData = new FormData();
+
+            var id = $("#box-photo-upload").data("id");
+            formData.append("id", id);
+
+            var numberFile = document.getElementById("selectFileUpload").files.length;
+            if (numberFile == 0) return;
+            var fileData = document.getElementById("selectFileUpload").files[0];
+            formData.append("FileUpload", fileData);
+
+            var urlUpload = "@Url.Action("UploadImageApi")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlUpload,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    LoadImages();
+                }
+            });
+        }
+        function ClickButtonUpload() {
+            $("#selectFileUpload").click();
+        }
+        function setClickDeleteImage() {
+            $("#box-photo-upload .photoDetail span").click(function () {
+                if (confirm("Có chắc chắn xóa ảnh") != true) return;
+
+                var spanButton = $(this);
+                var id = spanButton.data("id");
+
+                var formData = new FormData();
+                formData.append("id", id);
+
+                var urlDeleteImage = "@Url.Action("DeleteImage")";
+
+                $.ajax({
+                    data: formData,
+                    cache: false,
+                    url: urlDeleteImage,
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        LoadImages();
+                    }
+                });
+            });
+        }
+        function LoadImages() {
+            var box = $("#box-photo-upload");
+            var ProductId = box.data("id");
+            box.empty();
+
+            var formData = new FormData();
+            formData.append("id", ProductId);
+
+            var urlListImage = "@Url.Action("ListImages")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlListImage,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    data.images.forEach(function (item) {
+                        var e = $(
+                            '<div class="photoDetail w-25 p-1" >'
+                            + '<img class=" w-100" src = "' + item.path + '"/>'
+                            + '<span class="btn btn-danger mt-3" data-id="' + item.id + '"> Xóa ảnh </span>'
+                            + '</div>'
+                        );
+                        box.append(e);
+                    });
+                    setClickDeleteImage();
+                }
+            });
+        }
+        $(document).ready(function () {
+            LoadImages();
+        })
+    </script>
+}

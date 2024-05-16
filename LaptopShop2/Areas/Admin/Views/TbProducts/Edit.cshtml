@@ -1,38 +1,38 @@
 ﻿@model LaptopShop2.Models.TbProduct
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Sửa thông tin";
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Thêm sản phẩm</h5>
+                <h5 class="card-title fw-semibold mb-4">Thay đổi thông tin sản phẩm: @Model.ProductName</h5>
                     <div class="card">
                         <div class="card-body">
                             <form asp-action="Edit">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="ProductId" />
                                 <div class="form-group mb-3">
-                                    <label asp-for="ProductName" class="control-label form-label"></label>
+                                    <label asp-for="ProductName" class="control-label form-label">Tên sản phẩm</label>
                                     <input asp-for="ProductName" class="form-control" />
                                     <span asp-validation-for="ProductName" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Description" class="control-label form-label"></label>
+                                    <label asp-for="Description" class="control-label form-label">Mô tả</label>
                                     <input asp-for="Description" class="form-control" />
                                     <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Detail" class="control-label form-label"></label>
+                                    <label asp-for="Detail" class="control-label form-label">Bài viết đánh giá</label>
                                     <textarea asp-for="Detail" class="form-control"> </textarea>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Image" class="control-label form-label form-label form-label">Hình ảnh sản phẩm</label>
+                                    <label asp-for="Image" class="control-label form-label">Hình ảnh sản phẩm</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <button type="button" class="btn btn-success m-1 form-label" onclick="openDialog('file_input')">Chọn hình ảnh</button>
@@ -42,38 +42,46 @@
                                     </div>
                                     <span asp-validation-for="Image" class="text-danger"></span>
                                 </div>
+                                <div class="form-group mb-3">
+                                    <label class="control-label form-group">Hinh ảnh bổ sung</label>
+                                    <div class="input-group">
+                                        <input class="collapse"
+                                               type="file"
+                                               id="selectFileUpload"
+                                               onchange="AutoUploadImage()" />
+                                        <span class="btn btn-primary mt-3" onclick="ClickButtonUpload()">Upload hình ảnh</span>
+                                        <div id="box-photo-upload" data-id="@Model.ProductId" class="d-flex flex-wrap photo-upload">
+                                            @*Function LoadImages*@
+                                        </div>
+                                    </div>
+                                </div>
+                            
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Price" class="control-label form-label"></label>
+                                    <label asp-for="Price" class="control-label form-label">Giá bán</label>
                                     <input asp-for="Price" class="form-control" />
                                     <span asp-validation-for="Price" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Discount" class="control-label form-label"></label>
+                                    <label asp-for="Discount" class="control-label form-label">Tỉ lệ giảm giá</label>
                                     <input asp-for="Discount" class="form-control" />
                                     <span asp-validation-for="Discount" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Quantity" class="control-label form-label"></label>
+                                    <label asp-for="Quantity" class="control-label form-label">Số lượng</label>
                                     <input asp-for="Quantity" class="form-control" />
                                     <span asp-validation-for="Quantity" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label asp-for="CategoryProductId" class="control-label form-label">Danh mục</label>
-                                    <input type="text" asp-for="CategoryProductId" name="categoryInput" id="categoryInput" list="Category" class="form-control" />
-                                    <datalist id="Category">
-                                        @foreach (var item in (IEnumerable<SelectListItem>)ViewData["CategoryProductId"])
-                                        {
-                                            <option value="@item.Text"></option>
-                                        }
-                                    </datalist>
+                                    <select asp-for="CategoryProductId" asp-items="ViewBag.CategoryProductId" class="form-control"></select>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="BrandId" class="control-label form-label"></label>
+                                    <label asp-for="BrandId" class="control-label form-label">Thương hiệu</label>
                                     <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId"></select>
                                 </div>
 
@@ -327,3 +335,95 @@
     var summerNote = new LaptopShop2.Areas.Admin.Models.SummerNote("#Detail");
 }
 <partial name="_SummerNote" model="summerNote" />
+
+@section Scripts {
+    <script>
+        function AutoUploadImage() {
+            var formData = new FormData();
+
+            var id = $("#box-photo-upload").data("id");
+            formData.append("id", id);
+
+            var numberFile = document.getElementById("selectFileUpload").files.length;
+            if (numberFile == 0) return;
+            var fileData = document.getElementById("selectFileUpload").files[0];
+            formData.append("FileUpload", fileData);
+
+            var urlUpload = "@Url.Action("UploadImageApi")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlUpload,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    LoadImages();
+                }
+            });
+        }
+        function ClickButtonUpload() {
+            $("#selectFileUpload").click();
+        }
+        function setClickDeleteImage() {
+            $("#box-photo-upload .photoDetail span").click(function () {
+                if (confirm("Có chắc chắn xóa ảnh") != true) return;
+
+                var spanButton = $(this);
+                var id = spanButton.data("id");
+
+                var formData = new FormData();
+                formData.append("id", id);
+
+                var urlDeleteImage = "@Url.Action("DeleteImage")";
+
+                $.ajax({
+                    data: formData,
+                    cache: false,
+                    url: urlDeleteImage,
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        LoadImages();
+                    }
+                });
+            });
+        }
+        function LoadImages() {
+            var box = $("#box-photo-upload");
+            var ProductId = box.data("id");
+            box.empty();
+
+            var formData = new FormData();
+            formData.append("id", ProductId);
+
+            var urlListImage = "@Url.Action("ListImages")";
+
+            $.ajax({
+                data: formData,
+                cache: false,
+                url: urlListImage,
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    data.images.forEach(function (item) {
+                        var e = $(
+                            '<div class="photoDetail w-25 p-1" >'
+                            + '<img class=" w-100" src = "' + item.path + '"/>'
+                            + '<span class="btn btn-danger mt-3" data-id="' + item.id + '"> Xóa ảnh </span>'
+                            + '</div>'
+                        );
+                        box.append(e);
+                    });
+                    setClickDeleteImage();
+                }
+            });
+        }
+        $(document).ready(function () {
+            LoadImages();
+        })
+    </script>
+}
