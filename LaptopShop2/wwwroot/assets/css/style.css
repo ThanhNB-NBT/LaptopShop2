@@ -760,6 +760,10 @@ ol {
 .categories__item {
 	height: 270px;
 	position: relative;
+	padding: 17px 15px;
+	width: 108px;
+	height: 40px;
+	object-fit: cover;
 }
 
 .categories__item h5 {
