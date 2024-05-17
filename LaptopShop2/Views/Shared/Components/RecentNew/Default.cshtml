@@ -1,0 +1,22 @@
+﻿@using LaptopShop2.Models;
+@using LaptopShop2.Functions;
+@model IEnumerable<TbNews>
+
+@foreach (var recentNew in Model)
+{
+    string url = Function.TitleSlugGeneration("News", recentNew.Title, recentNew.NewId);
+    <div class="col-lg-4 col-md-4 col-sm-6">
+        <div class="blog__item">
+            <div class="blog__item__pic">
+                <img src="@recentNew.Image" alt="@recentNew.Title">
+            </div>
+            <div class="blog__item__text">
+                <ul>
+                    <li><i class="fa fa-calendar-o"></i> @recentNew.CreatedDate</li>
+                </ul>
+                <h5><a href="~/@url">@recentNew.Title</a></h5>
+                <p>@recentNew.Description</p>
+            </div>
+        </div>
+    </div>
+}

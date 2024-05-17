@@ -33,7 +33,7 @@
 html,
 body {
 	height: 100%;
-	font-family: "Montserrat", sans-serif;
+	font-family: Roboto, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
 }
@@ -47,7 +47,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 400;
-	font-family: "Montserrat", sans-serif;
+	font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 
 h1 {
@@ -76,7 +76,7 @@ h6 {
 
 p {
 	font-size: 16px;
-	font-family: "Montserrat", sans-serif;
+	font-family: Roboto, Helvetica, Arial, sans-serif;
 	color: #6f6f6f;
 	font-weight: 400;
 	line-height: 26px;
@@ -610,7 +610,7 @@ ol {
 	right: 18px;
 	top: 9px;
 	content: "3";
-	font-family: "Montserrat";
+	font-family: Roboto, Helvetica, Arial, sans-serif;
 	font-size: 18px;
 	color: #ffffff;
 }
@@ -757,8 +757,8 @@ ol {
   Categories
 -----------------------*/
 
+
 .categories__item {
-	height: 270px;
 	position: relative;
 	padding: 17px 15px;
 	width: 108px;
@@ -787,7 +787,8 @@ ol {
 }
 
 .categories__slider .col-lg-3 {
-	max-width: 100%;
+	max-width: 108px;
+	max-height: 40px;
 }
 
 .categories__slider.owl-carousel .owl-nav button {

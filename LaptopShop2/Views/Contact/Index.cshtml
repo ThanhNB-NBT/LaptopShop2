@@ -1,0 +1,131 @@
+﻿@model LaptopShop2.Models.TbContact
+
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/assets/img/backiee.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Ogani Shop</h2>
+                    <div class="breadcrumb__option">
+                        <a href="~/Home">Trang chủ </a>
+                        <span>Liên hệ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Contact Section Begin -->
+<section class="contact spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                <div class="contact__widget">
+                    <span class="icon_phone"></span>
+                    <h4>Điện thoại</h4>
+                    <p>+01-3-8888-6868</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                <div class="contact__widget">
+                    <span class="icon_pin_alt"></span>
+                    <h4>Địa chỉ</h4>
+                    <p>182 Lê Duẩn, thành phố Vinh, Nghệ An</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                <div class="contact__widget">
+                    <span class="icon_clock_alt"></span>
+                    <h4>Mở cửa</h4>
+                    <p>10:00 giờ đến 23:00 giờ </p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 text-center">
+                <div class="contact__widget">
+                    <span class="icon_mail_alt"></span>
+                    <h4>Email</h4>
+                    <p>nguyenthanh120223@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Contact Section End -->
+<!-- Contact Form Begin -->
+<div class="contact-form spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="contact__form__title">
+                    <h2>Lời nhắn</h2>
+                </div>
+            </div>
+        </div>
+        <form id="contactForm" role="form">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <input asp-for="Name" class="form-control" placeholder="Your name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <input asp-for="Email" class="form-control" placeholder="Your Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-lg-12 text-center">
+                    <textarea asp-for="Message" class="form-control" placeholder="Your message"></textarea>
+                    <span asp-validation-for="Message" class="text-danger"></span>
+                    <button id="submitButton" type="submit" class="site-btn">Gửi</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Contact Form End -->
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#contactForm").submit(function (e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+                var formData = $(this).serialize(); // Lấy dữ liệu từ form
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Contact/SendContactInfo",
+                    data: formData,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            setTimeout(function () {
+                                location.reload(); // Tải lại trang sau 1 giây
+                            }, 1500);
+                        } else {
+                            toastr.error("Có lỗ xảy ra, hãy thử lại!");
+                        }
+                    },
+                    error: function () {
+                        toastr.error("An error occurred. Please try again later.");
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

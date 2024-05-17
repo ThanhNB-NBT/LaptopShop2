@@ -29,4 +29,9 @@ public partial class TbNews
     public virtual TbCategoryNew? CategoryNew { get; set; }
     [NotMapped]
     public string? CategoryInput {  get; set; }
+
+    internal TbNews Where(Func<object, bool> value)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TbBrand>
+@{
+    string currentUrl = Context.Request.Path;
+    bool isHomePage = currentUrl == "/" || currentUrl == "/Home/Index";
+}
+<!-- Hero Section Begin -->
+<section class="hero @(isHomePage == false ? "hero-normal" : " ")">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Hãng sản xuất</span>
+                    </div>
+                    <ul>
+                        @foreach (var brand in Model)
+                        {
+                            <li><a href="#">@brand.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form action="#">
+                            <input type="text" placeholder="What do yo u need?">
+                            <button type="submit" class="site-btn">Tìm kiếm</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+84 968 456 637</h5>
+                            <span>Support 24/7 time</span>
+                        </div>
+                    </div>
+                </div>
+                @if (isHomePage)
+                {
+                    <div class="hero__item set-bg" data-setbg="/files/banner_home.jpg">
+                        @* <div class="hero__text">
+                            <span>FRUIT FRESH</span>
+                            <h2>Vegetable <br />100% Organic</h2>
+                            <p>Free Pickup and Delivery Available</p>
+                            <a href="#" class="primary-btn">SHOP NOW</a>
+                        </div> *@
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->

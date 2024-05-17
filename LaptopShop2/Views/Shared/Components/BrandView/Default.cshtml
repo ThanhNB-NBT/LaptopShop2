@@ -1,0 +1,29 @@
+﻿@using LaptopShop2.Models
+@using LaptopShop2.Functions
+@model IEnumerable<TbBrand>
+<style>
+    .categories__item1 {
+        position: relative;
+        padding: 17px 15px;
+        width: 108px;
+        height: 40px;
+        object-fit: cover;
+    }
+</style>
+
+<section class="categories">
+    <div class="container">
+        <div class="row">
+            <div class="categories__slider owl-carousel">
+                @foreach( var br in Model)
+                {
+                    <div class="col-lg-3">
+                        <div class="categories__item1 set-bg" data-setbg="@br.Banner">
+                            
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
