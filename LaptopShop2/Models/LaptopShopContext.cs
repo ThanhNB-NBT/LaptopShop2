@@ -112,7 +112,6 @@ public partial class LaptopShopContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(250);
             entity.Property(e => e.Message).HasMaxLength(550);
             entity.Property(e => e.Name).HasMaxLength(250);
-            entity.Property(e => e.Phone).HasMaxLength(250);
         });
 
         modelBuilder.Entity<TbCustomer>(entity =>
@@ -213,7 +212,6 @@ public partial class LaptopShopContext : DbContext
 
             entity.ToTable("TbOrderDetail");
 
-            entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
             entity.HasOne(d => d.Order).WithMany(p => p.TbOrderDetails)
                 .HasForeignKey(d => d.OrderId)

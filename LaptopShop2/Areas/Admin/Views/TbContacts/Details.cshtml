@@ -1,0 +1,54 @@
+﻿@model LaptopShop2.Models.TbContact
+
+@{
+    ViewData["Title"] = "Chi tiết";
+}
+
+<div class="container-fluid">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">Chi tiết</h5>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>@Model.Name</h4>
+                        <div>
+                            <dl class="row">
+                                <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                    Họ và tên:
+                                </dt>
+                                <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                    @Html.DisplayFor(model => model.Name)
+                                </dd>
+
+                                <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                    Email:
+                                </dt>
+                                <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                    @Html.DisplayFor(model => model.Email)
+                                </dd>
+                                <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                    Tin nhắn:
+                                </dt>
+                                <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                    @Html.DisplayFor(model => model.Message)
+                                </dd>
+                                
+                                <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                    Ngày gửi:
+                                </dt>
+                                <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                    @Html.DisplayFor(model => model.CreateDate)
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <a asp-action="Index" type="button" class="btn btn-outline-primary m-1">Quay lại</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

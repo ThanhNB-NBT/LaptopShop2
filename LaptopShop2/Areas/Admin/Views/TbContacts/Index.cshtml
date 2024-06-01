@@ -1,0 +1,148 @@
+﻿@model IPagedList<LaptopShop2.Models.TbContact>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+
+@{
+    ViewData["Title"] = "Liên hệ";
+    var successMessage = TempData["SuccessMessage"] as string;
+    var errorMessage = TempData["ErrorMessage"] as string;
+}
+
+<style>
+    .truncate-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 75px; /* Điều chỉnh giới hạn độ dài tùy ý */
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="d-flex align-items-stretch">
+            <div class="card w-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-semibold mb-4">Liên hệ</h5>
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div id="successAlert" class="alert alert-success">
+                            @successMessage
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div id="errorAlert" class="alert alert-danger">
+                            @errorMessage
+                        </div>
+                    }
+                    <p>
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <form method="get" action="@Url.Action("Index")" class="form-inline float-end">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="searchString" placeholder="Nhập email...">
+                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-nowrap mb-0 align-middle">
+                                <thead class="text-dark fs-4">
+                                    <tr>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">STT</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Họ và tên</h6>
+                                        </th>
+
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Email</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Lời nhắn</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Trạng thái</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Ngày gửi</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Chức năng</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@(i++)</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.Name</h6>
+                                            </td>
+
+
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0 truncate-text">@item.Email</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0 truncate-text">@item.Message</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    @if (item.IsRead.GetValueOrDefault())
+                                                    {
+                                                        <span class="badge bg-secondary rounded-3 fw-semibold">Đã đọc</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-danger rounded-3 fw-semibold">Chưa đọc</span>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <h6 class="fw-semibold mb-0">@item.CreateDate?.ToString("dd-MM-yyyy")</h6>
+                                            </td>
+                                            <td class="border-bottom-0">
+                                                <a asp-action="Details" asp-route-id="@item.ContactId" class="btn btn-info btn-sm btn-detail">Chi tiết</a> |
+                                                <a href="#" class="btn btn-warning btn-sm btn-delete" data-id="@item.ContactId">Xóa</a>
+                                                <!-- Form ẩn để thực hiện hành động xóa -->
+                                                <form id="deleteForm-@item.ContactId" method="post" action="@Url.Action("Delete", "TbContacts", new { id = item.ContactId })" style="display: none;">
+                                                    @Html.AntiForgeryToken()
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination">
+                            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded, LiElementClasses = new[] { "page-link" } })
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $(".btn-delete").click(function (e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
+                var contactId = $(this).data("id");
+                if (confirm("Bạn có chắc chắn muốn xóa?")) {
+                    $("#deleteForm-" + contactId).submit(); // Nộp form ẩn tương ứng
+                }
+            });
+        });
+    </script>
+}

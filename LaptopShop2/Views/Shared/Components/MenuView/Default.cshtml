@@ -10,4 +10,16 @@
             <a href="/@menu.ControllerName" class="active">@menu.MenuName</a>
         </li>
     }
+    else
+    {
+        <li>
+            <a href="/@menu.ControllerName" class="active">@menu.MenuName</a>
+                <ul class="header__menu__dropdown">
+                    @foreach (var smn in sMenu)
+                    {
+                        <li><a href="">@smn.MenuName</a></li>
+                    }
+                </ul>
+        </li>
+    }
 }

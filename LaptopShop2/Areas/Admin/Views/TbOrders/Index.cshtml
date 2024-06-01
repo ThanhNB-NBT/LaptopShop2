@@ -1,9 +1,11 @@
-﻿@model IPagedList<LaptopShop2.Models.TbNews>
+﻿@model IPagedList<LaptopShop2.Models.TbOrder>
 @using X.PagedList;
 @using X.PagedList.Mvc.Core;
+@using LaptopShop2.Functions;
+
 
 @{
-    ViewData["Title"] = "Tin tức";
+    ViewData["Title"] = "Đơn hàng";
     var successMessage = TempData["SuccessMessage"] as string;
     var errorMessage = TempData["ErrorMessage"] as string;
 }
@@ -22,7 +24,7 @@
         <div class="d-flex align-items-stretch">
             <div class="card w-100">
                 <div class="card-body p-4">
-                    <h5 class="card-title fw-semibold mb-4">Quản lý Blog</h5>
+                    <h5 class="card-title fw-semibold mb-4">Đơn hàng</h5>
                     @if (!string.IsNullOrEmpty(successMessage))
                     {
                         <div id="successAlert" class="alert alert-success">
@@ -37,15 +39,10 @@
                         </div>
                     }
                     <div class="row mb-3">
-                        <div class="col-sm-6">
-                            <p>
-                                <a asp-action="Create" class="btn btn-primary mb-3">Thêm mới</a>
-                            </p>
-                        </div>
-                        <div class="col-sm-6">
+                        <div class="float-right">
                             <form method="get" action="@Url.Action("Index")" class="form-inline float-end">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="searchString" placeholder="Nhập từ khóa...">
+                                    <input type="text" class="form-control" name="searchString" placeholder="Nhập tên khách hàng...">
                                     <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                                 </div>
                             </form>
@@ -59,28 +56,29 @@
                                         <h6 class="fw-semibold mb-0">STT</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Tiêu đề</h6>
+                                        <h6 class="fw-semibold mb-0">Mã đơn hàng</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Mô tả</h6>
+                                        <h6 class="fw-semibold mb-0">Người nhận</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Chi tiết</h6>
+                                        <h6 class="fw-semibold mb-0">Số điện thoại</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Hình ảnh</h6>
+                                        <h6 class="fw-semibold mb-0">Địa chỉ</h6>
+                                    </th>
+                                    
+                                    <th class="border-bottom-0">
+                                        <h6 class="fw-semibold mb-0">Ghi chú</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Ngày tạo</h6>
+                                        <h6 class="fw-semibold mb-0">Sản phẩm</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Tạo bởi</h6>
+                                        <h6 class="fw-semibold mb-0">Tổng tiền</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Hiển thị</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Danh mục</h6>
+                                        <h6 class="fw-semibold mb-0">Trạng thái</h6>
                                     </th>
                                     <th class="border-bottom-0">
                                         <h6 class="fw-semibold mb-0">Chức năng</h6>
@@ -99,54 +97,48 @@
                                             <h6 class="fw-semibold mb-0">@(i++)</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Title</h6>
+                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Code</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Description</h6>
+                                            <h6 class="fw-semibold mb-0 truncate-text">@item.CustomerName</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Detail)</h6>
+                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Phone</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <img style="max-width: 50px;height: 40px; object-fit: cover;" src="@item.Image" />
+                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Address</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">@item.CreatedDate?.ToString("dd-MM-yyyy")</h6>
+                                            <h6 class="fw-semibold mb-0 truncate-text">@item.Message</h6>
+                                        </td>
+                                        
+                                        <td class="border-bottom-0">
+                                            @foreach (var orderDetail in item.TbOrderDetails)
+                                            {
+                                                <div class="fw-semibold mb-0 truncate-text">
+                                                    <span>@orderDetail.Product.ProductName</span>
+                                                    <span>(@orderDetail.Quantity)</span>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0 truncate-text">@Function.FormatCurrency((decimal)item.TotalAmount)</h6>
+                                        </td>
+                                        <td class="border-bottom-0">
+                                            <form asp-action="UpdateOrderStatus" method="post" id="orderStatusForm-@item.OrderId">
+                                                <input type="hidden" name="orderId" value="@item.OrderId" />
+                                                <select asp-for="@item.OrderStatusId" asp-items="ViewBag.OrderStatuses" name="orderStatusId" class="form-control order-status-select">
+                                                    <option value="">-- Chọn trạng thái --</option>
+                                                </select>
+                                            </form>
                                         </td>
 
                                         <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0 truncate-text">@item.CreatedBy</h6>
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            <div class="d-flex align-items-center gap-2">
-                                                @if (item.IsActive)
-                                                {
-                                                    <span class="badge bg-secondary rounded-3 fw-semibold">Có</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-danger rounded-3 fw-semibold">Không</span>
-                                                }
-                                            </div>
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">
-                                                @if (item.CategoryNewId != null)
-                                                {
-                                                    @item.CategoryNew.Name
-                                                }
-                                                else
-                                                {
-                                                    <text>Không</text>
-                                                }
-                                            </h6>
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            <a asp-action="Edit" asp-route-id="@item.NewId" class="btn btn-danger btn-sm btn-edit">Sửa</a> |
-                                            <a asp-action="Details" asp-route-id="@item.NewId" class="btn btn-info btn-sm btn-detail">Chi tiết</a> |
-                                            <a href="#" class="btn btn-warning btn-sm btn-delete" data-id="@item.NewId">Xóa</a>
+                                            <a asp-action="Details" asp-route-id="@item.OrderId" class="btn btn-info btn-sm btn-detail">Chi tiết</a> |
+                                            <a href="#" class="btn btn-warning btn-sm btn-delete" data-id="@item.OrderId">Xóa</a>
                                             <!-- Form ẩn để thực hiện hành động xóa -->
-                                            <form id="deleteForm-@item.NewId" method="post" action="@Url.Action("Delete", "TbNews", new { id = item.NewId })" style="display: none;">
+                                            <form id="deleteForm-@item.OrderId" method="post" action="@Url.Action("Delete", "TbOrders", new { id = item.OrderId })"
+                                            style="display: none;">
                                                 @Html.AntiForgeryToken()
                                             </form>
                                         </td>
@@ -156,7 +148,8 @@
                         </table>
                     </div>
                     <div class="pagination">
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions { Display = PagedListDisplayMode.IfNeeded, LiElementClasses = new[] { "page-link" } })
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        { Display = PagedListDisplayMode.IfNeeded, LiElementClasses = new[] { "page-link" } })
                     </div>
                 </div>
             </div>
@@ -166,14 +159,18 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            $(".order-status-select").change(function () {
+                var formId = $(this).closest("form").attr("id");
+                $("#" + formId).submit();
+            });
+
             $(".btn-delete").click(function (e) {
-                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a>
-                var newId = $(this).data("id");
+                e.preventDefault();
+                var orderId = $(this).data("id");
                 if (confirm("Bạn có chắc chắn muốn xóa?")) {
-                    $("#deleteForm-" + newId).submit(); // Nộp form ẩn tương ứng
+                    $("#deleteForm-" + orderId).submit();
                 }
             });
         });
     </script>
 }
-

@@ -1,4 +1,4 @@
-/*  ---------------------------------------------------
+﻿/*  ---------------------------------------------------
     Template Name: Ogani
     Description:  Ogani eCommerce  HTML Template
     Author: Colorlib
@@ -175,6 +175,7 @@
         slide: function (event, ui) {
             minamount.val('$' + ui.values[0]);
             maxamount.val('$' + ui.values[1]);
+            filterProducts();
         }
     });
     minamount.val('$' + rangeSlider.slider("values", 0));
@@ -198,27 +199,57 @@
             });
         }
     });
-
-    /*-------------------
-		Quantity change
-	--------------------- */
-    var proQty = $('.pro-qty');
-    proQty.prepend('<span class="dec qtybtn">-</span>');
-    proQty.append('<span class="inc qtybtn">+</span>');
-    proQty.on('click', '.qtybtn', function () {
-        var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
-        if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
-        } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
-                var newVal = parseFloat(oldValue) - 1;
-            } else {
-                newVal = 0;
+    // Tạo một function để tải lại số lượng sản phẩm từ server và cập nhật nó lên thanh menu
+    function reloadCartItemCount() {
+        // Sử dụng AJAX để gửi yêu cầu lấy số lượng sản phẩm trong giỏ hàng
+        $.ajax({
+            url: '/ShoppingCart/GetCartItemCount',
+            type: 'GET',
+            success: function (result) {
+                // Cập nhật số lượng sản phẩm trên thanh menu
+                $('.humberger__menu__cart span').text(result);
+            },
+            error: function () {
+                console.log('Đã xảy ra lỗi khi tải lại số lượng sản phẩm.');
             }
-        }
-        $button.parent().find('input').val(newVal);
+        });
+    }
+    $(document).on('click', '.add-to-cart', function (e) {
+        e.preventDefault();
+        var productId = $(this).data('product-id');
+        var quantity = 1; // or get quantity from input
+        $.ajax({
+            url: '/ShoppingCart/AddToCart',
+            type: 'POST',
+            data: { productId: productId, quantity: quantity },
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    reloadCartItemCount();
+                } else {
+                    toastr.error(result.message);
+                }
+            }
+        });
     });
+
+    $('.remove-from-cart').on('click', function (e) {
+        e.preventDefault();
+        var productId = $(this).data('product-id');
+        $.ajax({
+            url: '/ShoppingCart/RemoveFromCart',
+            type: 'POST',
+            data: { productId: productId },
+            success: function (result) {
+                if (result.success) {
+                    toastr.success(result.message);
+                    location.reload();
+                } else {
+                    toastr.error(result.message);
+                }
+            }
+        });
+    });
+    
 
 })(jQuery);

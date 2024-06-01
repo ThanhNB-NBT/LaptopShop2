@@ -18,9 +18,11 @@ public partial class TbProduct
 
     public DateTime? CreatedDate { get; set; }
 
-    public decimal? Price { get; set; }
+    public decimal Price { get; set; }
+    public decimal Discount { get; set; }
 
-    public decimal? Discount { get; set; }
+    // Giá sản phẩm sau khi giảm
+    public decimal DiscountedPrice =>  (decimal)(Price - (Price * Discount));
 
     public int? Quantity { get; set; }
 

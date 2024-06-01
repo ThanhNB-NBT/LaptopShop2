@@ -1,0 +1,161 @@
+﻿@using LaptopShop2.Functions
+@model List<LaptopShop2.Models.TbOrderDetail>
+
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    int stt = 1;
+    decimal? total = 0;
+}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/assets/img/backiee.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Giỏ hàng</h2>
+                    <div class="breadcrumb__option">
+                        <a href="./Home">Trang chủ</a>
+                        <span>Giỏ hàng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th class="shoping__product">Sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Tổng</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items">
+                            @foreach (var item in Model)
+                            {
+                                var cartTotal = item.Quantity * (item.Product.Discount != 0 ? item.Product.DiscountedPrice : item.Product.Price);
+                                total += cartTotal ?? 0;
+                                <tr>
+                                    <td >@(stt++)</td>
+                                    <td class="shoping__cart__item">
+                                        <img src="@item.Product.Image" style="max-width: 50px;height: 40px; object-fit: cover;" alt="@item.Product.ProductName">
+                                        <h5>@item.Product.ProductName</h5>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                        @if (item.Product.Discount != 0)
+                                        {
+                                            @Function.FormatCurrency(item.Product.DiscountedPrice) <span style="font-size:15px;"></span>
+                                        }
+                                        else
+                                        {
+                                           @Function.FormatCurrency(item.Product.Price) <span style="font-size:15px;"></span>
+                                        }
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                                <input type="text" id="quantity-@item.Product?.ProductId" data-product-id="@item.Product.ProductId" value="@item.Quantity">
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        @Function.FormatCurrency(cartTotal ?? 0) <span style="font-size:15px;"></span>
+                                    </td>
+                                    <td class="shoping__cart__item__close">
+                                        <a href="#" data-product-id="@item.Product.ProductId" class="remove-from-cart">×</a
+                                    </td>
+                                    <input type="hidden" class="order-id-input" value="@ViewBag.OrderId">
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__checkout">
+                    <h5>Thành tiền</h5>
+                    <ul>
+                        <li>Tổng <span id="total-amount">@Function.FormatCurrency(total ?? 0)</span></li>
+                        <form asp-action="Checkout" asp-controller="ShoppingCart" method="post">
+                            <input type="hidden" name="totalAmount" value="@total">
+                            <button type="submit" class="primary-btn" id="checkout-btn">Đặt hàng</button>
+                        </form>
+
+                    </ul>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shoping Cart Section End -->
+@section Scripts {
+    <script>
+        /*-------------------
+           Quantity change
+        --------------------- */
+        var proQty = $('.pro-qty');
+        proQty.prepend('<span class="dec qtybtn">-</span>');
+        proQty.append('<span class="inc qtybtn">+</span>');
+        proQty.on('click', '.qtybtn', function () {
+            var $button = $(this);
+            var oldValue = $button.parent().find('input').val();
+            var newVal;
+            if ($button.hasClass('inc')) {
+                newVal = parseFloat(oldValue) + 1;
+            } else {
+                if (oldValue > 0) {
+                    newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
+            }
+            $button.parent().find('input').val(newVal);
+
+            var productId = $button.parent().find('input').data('product-id');
+            $.ajax({
+                url: '/ShoppingCart/AddToCart',
+                type: 'POST',
+                data: { productId: productId, quantity: newVal - oldValue },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                        location.reload();
+                    } else {
+                        toastr.error(result.message);
+                    }
+                }
+            });
+            if (newVal === 0) {
+                var productId = $(this).data('product-id');
+                $.ajax({
+                    url: '/ShoppingCart/RemoveFromCart',
+                    type: 'POST',
+                    data: { productId: productId },
+                    success: function (result) {
+                        if (result.success) {
+                            toastr.success(result.message);
+                            location.reload();
+                        } else {
+                            toastr.error(result.message);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

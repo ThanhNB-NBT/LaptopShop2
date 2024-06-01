@@ -5,16 +5,11 @@ using System.Diagnostics;
 namespace LaptopShop2.Components
 {
     [ViewComponent(Name = "LastestProduct")]
-    public class LastestProductComponent : ViewComponent
+    public class LastestProductComponent(LaptopShopContext context) : ViewComponent
     {
-        private readonly LaptopShopContext _context;
+        private readonly LaptopShopContext _context = context;
 
-        public LastestProductComponent(LaptopShopContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var lastestProduct = _context.TbProducts
                                    .Where(p => p.IsActive && p.IsNew)

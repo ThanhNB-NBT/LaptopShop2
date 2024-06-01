@@ -1,19 +1,30 @@
-using LaptopShop2.Models;
+﻿using LaptopShop2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using LaptopShop2;
 using Microsoft.Extensions.Options;
+using LaptopShop2.Functions;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<LaptopShopContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian tồn tại của Session
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
@@ -33,7 +44,9 @@ app.UseStaticFiles(new StaticFileOptions()
     RequestPath = "/files"
 });
 
+app.UseSession();
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();

@@ -1,0 +1,85 @@
+﻿@using LaptopShop2.Functions
+@model LaptopShop2.Models.TbOrder
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/assets/img/backiee.jpgg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Xác nhận đơn hàng</h2>
+                    <div class="breadcrumb__option">
+                        <a href="./index.html">Trang chủ</a>
+                        <span>Xác nhận đơn hàng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <h4>Thông tin khách hàng</h4>
+            <form action="/ShoppingCart/CustomerInfo" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="OrderId" />
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="checkout__input">
+                            <p>Họ và tên<span>*</span></p>
+                            <input type="text" asp-for="CustomerName">
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Địa chỉ<span>*</span></p>
+                            <input asp-for="Address" type="text" class="checkout__input__add">
+                        </div>
+                       
+                        <div class="checkout__input">
+                            <p>Điện thoại<span>*</span></p>
+                            <input asp-for="Phone" type="text">
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Lời nhắn<span>*</span></p>
+                            <textarea class="form-control" type="text" asp-for="Message" placeholder="Lưu ý cho người bán..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="checkout__order">
+                            <h4>Đơn hàng của bạn</h4>
+                            <div class="checkout__order__products">Sản phẩm <span>Đơn giá</span></div>
+                            <ul>
+                                @foreach (var item in Model.TbOrderDetails)
+                                {
+                                    <li class="">@item.Product.ProductName (@item.Quantity) <span>@Function.FormatCurrency(item.Product.Discount != 0 ? item.Product.DiscountedPrice : item.Product.Price)</span></li>
+                                }
+                            </ul>
+                            
+                            <div class="checkout__order__total">Tổng tiền<span> @Function.FormatCurrency((decimal)Model.TbOrderDetails.Sum(x => x.Quantity * (x.Product.Discount != 0 ? x.Product.DiscountedPrice : x.Product.Price)))</span></div>
+
+                            <button type="submit" class="site-btn">Đặt hàng</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                toastr.success(successMessage);
+                setTimeout(function () {
+                    window.location.href = '/Home/Index';
+                }, 3000); // Thời gian hiển thị toastr trước khi chuyển hướng (3000 ms = 3 giây)
+            }
+        });
+    </script>
+}

@@ -1,26 +1,28 @@
 ﻿@model List<LaptopShop2.Models.TbProduct>
+@using LaptopShop2.Functions;
 
 @for (int i = 0; i < Model.Count(); i += 3)
 {
     <div class="latest-prdouct__slider__item">
         @foreach (var product in Model.Skip(i).Take(3))
         {
-            <a href="#" class="latest-product__item">
+            string url = Function.TitleSlugGeneration("Product", product.ProductName, product.ProductId);
+            <a href="/@url" class="latest-product__item">
                 <div class="latest-product__item__pic">
-                    <img src="@product.Image" alt="@product.ProductName">
+                    <img style="width: 110px; height: 110px; object-fit: cover;" src="@product.Image" alt="@product.ProductName">
                 </div>
                 <div class="latest-product__item__text">
                     <h6>@product.ProductName</h6>
                     @if (product.Discount > 0)
                     {
-                        <del><span style="color: red; font-size: 13px;">@String.Format("{0:N0}", product.Price) đồng</span></del>
-                        <div class="discount-price">
-                            <span class="discounted-price">@String.Format("{0:N0}", product.Price - (product.Price * product.Discount)) đồng</span>
+                        <del><span style="color: red; font-size: 16px;">@Function.FormatCurrency(product.Price)</span></del>
+                        <div class="discount-price-home">
+                            <span class="discounted-price-home">@Function.FormatCurrency(product.DiscountedPrice)</span>
                         </div>
                     }
                     else
                     {
-                        <span style="font-size: 13px;">@String.Format("{0:N0}", product.Price) đồng</span>
+                        <span style="font-size: 16px;">@Function.FormatCurrency(product.Price)</span>
                     }
                 </div>
             </a>

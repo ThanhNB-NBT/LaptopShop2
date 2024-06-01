@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var session = HttpContextAccessor.HttpContext.Session;
+    string jsoncart = session.GetString("Cart");
+    int numberOfProducts = 0;
+
+    if (jsoncart != null)
+    {
+        var cart = JsonConvert.DeserializeObject<List<TbOrderDetail>>(jsoncart);
+        numberOfProducts = cart.Count;
+    }
+}
+
+<li><a href="/ShoppingCart"><i class="fa fa-shopping-bag"></i> <span>@numberOfProducts</span></a></li>

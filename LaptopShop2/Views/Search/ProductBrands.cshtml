@@ -1,0 +1,59 @@
+﻿@model List<LaptopShop2.Models.TbProduct>
+@using LaptopShop2.Functions;
+@{
+    ViewData["Title"] = ViewBag.BrandName;
+    bool hasProducts = ViewBag.HasProducts;
+}
+<section class="breadcrumb-section set-bg" data-setbg="/assets/img/backiee.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <div class="breadcrumb__option">
+                        <a href="~/Home">Trang chủ</a>
+                        <span>@ViewBag.BrandName</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@if (hasProducts)
+{
+    <div class="row">
+        @foreach (var product in Model)
+        {
+            string url = Function.TitleSlugGeneration("Product", product.ProductName, product.ProductId);
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="@product.Image">
+                        <ul class="product__item__pic__hover">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                            <li><a class="add-to-cart" data-product-id="@product.ProductId"><i class="fa fa-shopping-cart"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="/@url">@product.ProductName</a></h6>
+                        @if (product.Discount > 0)
+                        {
+                            <del><span style="color: red; font-size: 16px;">@Function.FormatCurrency(product.Price)</span></del>
+                            <div class="discount-price-home">
+                                <span class="discounted-price-home">@Function.FormatCurrency(product.DiscountedPrice)</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <span style="font-size: 16px;">@Function.FormatCurrency(product.Price)</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2>Tạm thời chưa có sản phẩm từ thương hiệu @ViewBag.BrandName</h2>
+}

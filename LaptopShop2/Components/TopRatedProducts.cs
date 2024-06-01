@@ -4,15 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace LaptopShop2.Components
 {
     [ViewComponent(Name = "TopRatedProducts")]
-    public class TopRatedProducts : ViewComponent
+    public class TopRatedProducts(LaptopShopContext context) : ViewComponent
     {
-        private readonly LaptopShopContext _context;
-        public TopRatedProducts(LaptopShopContext context)
-        {
-            _context = context;
-        }
+        private readonly LaptopShopContext _context = context;
 
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             var topRatedProduct = _context.TbProducts
                                    .Where(p => p.IsActive && p.IsBestSell)

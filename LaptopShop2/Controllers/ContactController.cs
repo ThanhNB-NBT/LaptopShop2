@@ -29,6 +29,7 @@ namespace LaptopShop2.Controllers
             {
                 // Lưu thông tin liên hệ vào database
                 model.CreateDate = DateTime.Now;
+                model.IsRead = false;
                 _context.TbContacts.Add(model);
                 await _context.SaveChangesAsync();
 

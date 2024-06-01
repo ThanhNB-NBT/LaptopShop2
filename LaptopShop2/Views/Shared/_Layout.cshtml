@@ -1,6 +1,10 @@
-﻿<!DOCTYPE html>
-<html lang="en-gb">
+﻿@{
+    string currentUrl = Context.Request.Path;
+    bool isHomePage = currentUrl == "/" || currentUrl == "/Home/Index";
+}
 
+<!DOCTYPE html>
+<html lang="en-gb,el-GR">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Ogani">
@@ -30,7 +34,7 @@
             display: flex;
             align-items: center;
             justify-content: center; /* Thêm dòng này để căn giữa */
-            font-size: 16px;
+            font-size: 13px;
             color: #666;
         }
 
@@ -75,9 +79,8 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                @await Html.PartialAsync("_CartCount")
             </ul>
-            @* <div class="header__cart__price">item: <span>$150.00</span></div> *@
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__auth">
@@ -145,9 +148,8 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>0</span></a></li>
+                            @await Html.PartialAsync("_CartCount")
                         </ul>
-                        @* <div class="header__cart__price">item: <span>$150.00</span></div> *@
                     </div>
                 </div>
             </div>
@@ -158,7 +160,52 @@
     </header>
     
     <!-- Header Section End -->
-    @await Component.InvokeAsync("HeroSectionView")
+    <!-- Hero Section Begin -->
+    <section class="hero @(isHomePage == false ? "hero-normal" : " ")">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="hero__categories">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>Thương hiệu</span>
+                        </div>
+                        <ul>
+                            @await Component.InvokeAsync("HeroSectionView")
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="/Search/Results" method="get">
+                                <input type="text" name="query" placeholder="Bạn cần gì?">
+                                <button type="submit" class="site-btn">Tìm kiếm</button>
+                            </form>
+                        </div>
+                        <div class="hero__search__phone">
+                            <div class="hero__search__phone__icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="hero__search__phone__text">
+                                <h5>+84 968 456 637</h5>
+                                <span>Support 24/7 time</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (isHomePage)
+                    {
+                        <div class="hero__item set-bg" data-setbg="/files/banner_home.jpg">
+                            <div class="hero__text">
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Section End -->
+    
 
     @RenderBody()
     <!-- Footer Section Begin -->
@@ -175,7 +222,16 @@
     <script src="~/assets/js/owl.carousel.min.js"></script>
     <script src="~/assets/js/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    @RenderSection("Scripts", required: false)
 
+    <script>
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            if (successMessage) {
+                toastr.success(successMessage);
+            }
+        });
+    </script>
+    @RenderSection("Scripts", required: false)
+    
 </body>
 </html>

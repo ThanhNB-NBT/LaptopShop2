@@ -1,0 +1,464 @@
+﻿
+@model LaptopShop2.Models.TbProduct
+@using LaptopShop2.Functions;
+
+@{
+    ViewData["Title"] = Model.ProductName.ToString();
+    string url = Function.TitleSlugGeneration("Product", Model.ProductName, Model.ProductId);
+}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/assets/img/backiee.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>@Model.ProductName</h2>
+                    <div class="breadcrumb__option">
+                        <a href="./Home">Home</a>
+                        <a href="">@Model.Brand.Name</a>
+                        <span>@Model.ProductName</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Product Details Section Begin -->
+<section class="product-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__pic">
+                    <div class="product__details__pic__item">
+                        <img class="product__details__pic__item--large"
+                             src="@Model.Image" alt="">
+                    </div>
+                    <div class="product__details__pic__slider owl-carousel">
+                        @foreach(var image in Model.TbImages )
+                        {
+                            <img data-imgbigurl="/files/@image.ImagePath"
+                             src="/files/@image.ImagePath" alt="">
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <div class="product__details__text">
+                    <h3>@Model.ProductName</h3>
+                   @*  <div class="product__details__rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half-o"></i>
+                        <span>(18 reviews)</span>
+                    </div> *@
+                    @if (Model.Discount > 0)
+                    {
+                        <div class="d-flex align-items-center">
+                            <span class="fw-bold" style="font-size: 23px;margin-right: 4px;">@Function.FormatCurrency(Model.DiscountedPrice)</span>
+                            <del><span style="color: red; font-size: 16px;">@Function.FormatCurrency(Model.Price)</span></del>
+                        </div>
+                    }
+                    else
+                    {
+                        <span style="font-size: 16px;">@Function.FormatCurrency(Model.Price)</span>
+                    }
+
+
+                    <p>
+                        @Model.Description
+                    </p>
+                    <div class="product__details__quantity">
+                        <div class="quantity">
+                            <div class="pro-qty">
+                                <input type="text" id="quantityInput" value="1" data-product-id="@Model.ProductId">
+                            </div>
+                        </div>
+                    </div>
+                    <a style="cursor:pointer;font-color: white;" data-product-id="@Model.ProductId" class="primary-btn add-to-cart-detail">Thêm vào giỏ hàng</a>
+@*                     <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a> *@
+                    <ul>
+                        <li><b>CPU: </b> <span>@Model.CpuCompany @Model.CpuType</span></li>
+                        <li><b>RAM: </b> <span>@Model.RamSize</span></li>
+                        <li><b>Bộ nhớ: </b> <span>@Model.DriveMemory</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="product__details__tab">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab"
+                               aria-selected="true">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab"
+                               aria-selected="false">Thông tin sản phẩm</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
+                               aria-selected="false">Reviews <span>(1)</span></a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>@Model.Description</h6>
+                                @Html.Raw(Model.Detail)
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Products Infomation</h6>
+                                <dl class="row">
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Thương hiệu:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Brand.Name)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.Code)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Code)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Xuất xứ:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Origin)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Kích thước:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Size)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Cân nặng:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Weight)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Màu sắc:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Color)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Chất liệu
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Material)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Hãng CPU:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuCompany)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Loại CPU:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuType)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Tốc độ CPU:
+                                    </dt>
+
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuSpeed)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Tốc độ tối đa CPU:
+                                    </dt>
+
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuMaxSpeed)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Số nhân CPU:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuCore)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Số luồng CPU:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CpuProcessor)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Dung lượng RAM:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.RamSize)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Kiểu RAM:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.RamType)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Tốc độ RAM:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.RamSpeed)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Hỗ trợ tối đa:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.RamSupportMax)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Kích thước màn hình:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.ScreenSize)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Độ phân giải:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.ScreenPixel)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Tấm nền:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.ScreenPanel)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.CardBrand)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CardBrand)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.CardModel)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.CardModel)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Ổ cứng:
+                                    </dt>
+
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.DriveType)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Dung lượng ổ cứng:
+                                    </dt>
+
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.DriveMemory)
+                                    </dd>
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Các cổng giao tiếp:
+                                    </dt>
+
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @{
+                                            var ports = Model.ConnectPort.Split(',');
+                                        }
+
+                                        <ul class="list-inline">
+                                            @foreach (var port in ports)
+                                            {
+                                                <li class="list-inline-item">@port.Trim()</li>
+                                            }
+                                        </ul>
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.Wifi)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Wifi)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.Bluetooth)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Bluetooth)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        @Html.DisplayNameFor(model => model.Webcam)
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Webcam)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Loại Pin:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.PinType)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Dung lượng Pin:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.PinCapacity)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Hệ sinh thái:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Os)
+                                    </dd>
+
+                                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                                        Phiên bản:
+                                    </dt>
+                                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                                        @Html.DisplayFor(model => model.Version)
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-3" role="tabpanel">
+                            <div class="product__details__tab__desc">
+                                <h6>Products Infomation</h6>
+                                <p>
+                                    Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.
+                                    Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus.
+                                    Vivamus suscipit tortor eget felis porttitor volutpat. Vestibulum ac diam
+                                    sit amet quam vehicula elementum sed sit amet dui. Donec rutrum congue leo
+                                    eget malesuada. Vivamus suscipit tortor eget felis porttitor volutpat.
+                                    Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Praesent
+                                    sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ac
+                                    diam sit amet quam vehicula elementum sed sit amet dui. Vestibulum ante
+                                    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+                                    Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula.
+                                    Proin eget tortor risus.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Details Section End -->
+<!-- Related Product Section Begin -->
+<section class="related-product">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title related__product__title">
+                    <h2>Related Product</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var rp in ViewBag.RelatedProducts as List<LaptopShop2.Models.TbProduct>)
+            {
+                string urlRP = Function.TitleSlugGeneration("Product", rp.ProductName, rp.ProductId);
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product__item">
+                    <div class="product__item__pic set-bg" data-setbg="@rp.Image">
+                        <ul class="product__item__pic__hover">
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                            <li><a data-product-id="@rp.ProductId"><i class="fa fa-shopping-cart add-to-cart"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="product__item__text">
+                        <h6><a href="/@urlRP">@rp.ProductName</a></h6>
+                            @if (rp.Discount > 0)
+                            {
+                                <del><span style="color: red; font-size: 16px;">@String.Format("{0:N0}", rp.Price) đồng</span></del>
+                                <div class="discount-price-home">
+                                    <span class="discounted-price-home">@String.Format("{0:N0}", rp.DiscountedPrice) đồng</span>
+                                </div>
+                            }
+                            else
+                            {
+                                <span style="font-size: 16px;">@String.Format("{0:N0}", rp.Price) đồng</span>
+                            }
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Related Product Section End -->
+@section Scripts {
+    <script>
+        // Sự kiện click cho nút "Thêm vào giỏ hàng"
+        $('.add-to-cart-detail').click(function () {
+            var productId = $(this).data('product-id');
+            var quantity = $('#quantityInput').val();
+
+            $.ajax({
+                url: '/ShoppingCart/AddToCart',
+                type: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function (result) {
+                    if (result.success) {
+                        toastr.success(result.message);
+                    } else {
+                        toastr.error(result.message);
+                    }
+                }
+            });
+        });
+
+        /*-------------------
+           Quantity change
+        --------------------- */
+        var proQty = $('.pro-qty');
+        proQty.prepend('<span class="dec qtybtn">-</span>');
+        proQty.append('<span class="inc qtybtn">+</span>');
+        proQty.on('click', '.qtybtn', function () {
+            var $button = $(this);
+            var oldValue = $button.parent().find('input').val();
+            var newVal;
+            if ($button.hasClass('inc')) {
+                newVal = parseFloat(oldValue) + 1;
+            } else {
+                if (oldValue > 0) {
+                    newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 0;
+                }
+            }
+            $button.parent().find('input').val(newVal);
+        });
+    </script>
+}
