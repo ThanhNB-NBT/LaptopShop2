@@ -120,6 +120,7 @@ public partial class LaptopShopContext : DbContext
 
             entity.ToTable("TbCustomer");
 
+            entity.Property(e => e.FullName).HasMaxLength(250);
             entity.Property(e => e.Address).HasMaxLength(250);
             entity.Property(e => e.Email).HasMaxLength(250);
             entity.Property(e => e.Password).HasMaxLength(50);

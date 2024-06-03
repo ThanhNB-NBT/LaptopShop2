@@ -125,7 +125,7 @@
                                             <h6 class="fw-semibold mb-0 truncate-text">@Function.FormatCurrency((decimal)item.TotalAmount)</h6>
                                         </td>
                                         <td class="border-bottom-0">
-                                            <form asp-action="UpdateOrderStatus" method="post" id="orderStatusForm-@item.OrderId">
+                                            <form asp-action="UpdateOrderStatus" method="post" class="orderStatusForm" id="orderStatusForm-@item.OrderId">
                                                 <input type="hidden" name="orderId" value="@item.OrderId" />
                                                 <select asp-for="@item.OrderStatusId" asp-items="ViewBag.OrderStatuses" name="orderStatusId" class="form-control order-status-select">
                                                     <option value="">-- Chọn trạng thái --</option>

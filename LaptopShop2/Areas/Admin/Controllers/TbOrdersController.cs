@@ -66,7 +66,8 @@ namespace LaptopShop2.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            ViewBag.OrderStatuses = new SelectList(_context.TbOrderStatuses, "OrderStatusId", "Name");
+            var orderStatuses = await _context.TbOrderStatuses.ToListAsync();
+            ViewBag.OrderStatuses = new SelectList(orderStatuses, "OrderStatusId", "Name");
 
             return View(tbOrder);
         }
