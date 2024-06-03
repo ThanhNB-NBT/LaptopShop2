@@ -1,4 +1,5 @@
 ﻿using LaptopShop2.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using LaptopShop2;
 using Microsoft.Extensions.Options;
 using LaptopShop2.Functions;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,15 @@ builder.Services.AddDbContext<LaptopShopContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Login"; // Đường dẫn đến action đăng nhập
+                options.LogoutPath = "/Logout"; // Đường dẫn đến action đăng xuất
+                // Cấu hình thêm các options nếu cần
+            });
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
@@ -49,6 +60,8 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>

@@ -59,10 +59,11 @@ public partial class LaptopShopContext : DbContext
 
             entity.ToTable("TbAccount");
 
+            entity.Property(e => e.FullName).HasMaxLength(250);
             entity.Property(e => e.Address).HasMaxLength(250);
             entity.Property(e => e.Avatar).HasMaxLength(550);
             entity.Property(e => e.Email).HasMaxLength(250);
-            entity.Property(e => e.Password).HasMaxLength(50);
+            entity.Property(e => e.Password).HasMaxLength(550);
             entity.Property(e => e.Phone).HasMaxLength(15);
             entity.Property(e => e.Username).HasMaxLength(50);
 
