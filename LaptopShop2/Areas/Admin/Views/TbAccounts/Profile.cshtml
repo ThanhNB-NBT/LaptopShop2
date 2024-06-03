@@ -1,0 +1,62 @@
+﻿@model LaptopShop2.Models.TbAccount
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+
+<div class="container-fluid">
+    <div class="container mt-5">
+        <h2>Thông tin cá nhân</h2>
+        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group text-center">
+                        <img id="avatarPreview" src="@Model.Avatar" alt="Avatar" class="img-thumbnail mb-3" style="width: 200px; height: 200px;">
+                        <input type="file" class="form-control" id="avatar" name="avatar" accept="image/*" onchange="previewAvatar()">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group mb-3">
+                        <label class="fw-semibold" for="fullName">Họ tên:</label>
+                        <input type="text" class="form-control" id="fullName" name="FullName" value="@Model.FullName">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="fw-semibold" for="address">Địa chỉ:</label>
+                        <input type="text" class="form-control" id="address" name="Address" value="@Model.Address">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="fw-semibold" for="phone">Số điện thoại:</label>
+                        <input type="text" class="form-control" id="phone" name="Phone" value="@Model.Phone">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="fw-semibold" for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" name="Email" value="@Model.Email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        function previewAvatar() {
+            var preview = document.getElementById('avatarPreview');
+            var file = document.getElementById('avatar').files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    </script>
+}

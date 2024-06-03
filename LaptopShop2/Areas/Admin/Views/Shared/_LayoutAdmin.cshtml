@@ -1,4 +1,4 @@
-﻿@* @using LaptopShop2.Utilities; *@
+﻿@using System.Security.Claims
 
 <!doctype html>
 <html lang="en">
@@ -29,6 +29,13 @@
 </head>
 
 <body>
+    @{
+        var identity = User.Identity as ClaimsIdentity;
+        var fullName = identity?.FindFirst("FullName")?.Value ?? "Người dùng";
+        var username = identity?.Name ?? "Admin";
+        var accountId = identity?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var avatar = identity?.FindFirst("Avatar")?.Value ?? "/admin/assets/images/profile/user-1.jpg";
+    }
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
          data-sidebar-position="fixed" data-header-position="fixed">
@@ -53,25 +60,24 @@
 
                                 <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
                                    aria-expanded="false">
-                                    <img src="~/admin/assets/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
-                                    <p class="mb-0 fs-5 text-dark" style="margin-left: 5px;">@* @Functions._FullName *@</p>
+                                    <img src="@avatar" alt="" width="35" height="35" class="rounded-circle">
+                                    <p class="mb-0 fs-5 text-dark" style="margin-left: 5px;">@fullName</p>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                     <div class="message-body">
-                                        <a asp-action="Details" asp-controller="Accounts" asp-route-id="@* @Functions._AccountId *@" class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-user fs-5"></i>
-                                            <p class="mb-0 fs-4 fw-semi">@* @Functions._UserName *@</p>
-                                        </a>
-                                        <a asp-action="ChangePassword" asp-controller="Accounts" asp-route-id="@* @Functions._AccountId *@" class="d-flex align-items-center gap-2 dropdown-item">
-                                            <i class="ti ti-pencil-plus fs-6"></i>
-                                            <p class="mb-0 fs-3">Đổi mật khẩu</p>
-                                        </a>
-                                        @* <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-list-check fs-6"></i>
-                                        <p class="mb-0 fs-3">My Task</p>
-                                        </a> *@
-                                        <a href="/Admin/Login/Logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Đăng xuất</a>
+                                        @if (!string.IsNullOrEmpty(accountId))
+                                        {
+                                            <a asp-action="Profile" asp-controller="TbAccounts" asp-route-id="@accountId" class="d-flex align-items-center gap-2 dropdown-item">
+                                                <i class="ti ti-user fs-5"></i>
+                                                <p class="mb-0 fs-4 fw-semi">@username</p>
+                                            </a>
+                                            <a asp-action="ChangePassword" asp-controller="TbAccounts" asp-route-id="@accountId" class="d-flex align-items-center gap-2 dropdown-item">
+                                                <i class="ti ti-pencil-plus fs-6"></i>
+                                                <p class="mb-0 fs-3">Đổi mật khẩu</p>
+                                            </a>
+                                        }
+                                        <a href="@Url.Action("Logout", "LoginAdmin", new { area = "Admin" })" class="btn btn-outline-primary mx-3 mt-2 d-block">Đăng xuất</a>
                                     </div>
                                 </div>
                             </li>
@@ -87,13 +93,10 @@
 </body>
 <script>
     $(document).ready(function () {
-        // Ẩn thông báo sau 2 giây (2000 milliseconds)
         setTimeout(function () {
-            $("#successAlert").fadeOut(500);
-            $("#errorAlert").fadeOut(500);
+            $("#successAlert, #errorAlert").fadeOut(500);
         }, 2000);
-    });
-    $(document).ready(function () {
+
         $('.nav-small-cap').click(function () {
             $(this).toggleClass('active');
         });

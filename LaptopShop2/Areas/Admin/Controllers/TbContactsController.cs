@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using LaptopShop2.Models;
 using X.PagedList;
 using LaptopShop2.Functions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class TbContactsController : Controller
     {
         private readonly LaptopShopContext _context;

@@ -1,4 +1,5 @@
 ﻿using LaptopShop2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using X.PagedList;
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class TbMenusController : Controller
     {
         private readonly LaptopShopContext _context;

@@ -10,10 +10,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using BCrypt.Net;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class TbAccountsController : Controller
     {
         private readonly LaptopShopContext _context;
@@ -165,6 +167,60 @@ namespace LaptopShop2.Areas.Admin.Controllers
         private bool TbAccountExists(int id)
         {
             return _context.TbAccounts.Any(e => e.AccountId == id);
+        }
+
+        // GET: Admin/TbAccounts/Profile
+        public async Task<IActionResult> Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _context.TbAccounts.FindAsync(int.Parse(userId));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: Admin/TbAccounts/UpdateProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(TbAccount model, IFormFile avatar)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Profile", model);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _context.TbAccounts.FindAsync(int.Parse(userId));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (avatar != null && avatar.Length > 0)
+            {
+                var fileName = Path.GetFileName(avatar.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await avatar.CopyToAsync(fileStream);
+                }
+                model.Avatar = "/files/" + fileName;
+            }
+
+            user.FullName = model.FullName;
+            user.Address = model.Address;
+            user.Phone = model.Phone;
+            user.Email = model.Email;
+
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Profile");
         }
     }
 }

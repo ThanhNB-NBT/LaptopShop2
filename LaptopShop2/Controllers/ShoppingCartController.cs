@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace LaptopShop2.Controllers
 {
@@ -93,7 +94,17 @@ namespace LaptopShop2.Controllers
             {
                 return Json(new { success = false, message = "Giỏ hàng của bạn đang trống." });
             }
+            // Lấy thông tin người dùng đã đăng nhập từ claim
+            var customerIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (customerIdClaim == null)
+            {
+                // Nếu không tìm thấy thông tin người dùng, xử lý tùy thuộc vào yêu cầu của ứng dụng của bạn,
+                // có thể quay lại trang đăng nhập hoặc yêu cầu đăng nhập trước khi tiếp tục.
+                return Json(new { success = false, message = "Vui lòng đăng nhập trước khi thực hiện thanh toán." });
+            }
 
+            // Gán customerId cho đơn hàng
+            order.CustomerId = Convert.ToInt32(customerIdClaim.Value);
             // Gán tổng tiền cho đơn hàng
             order.TotalAmount = totalAmount;
             order.CreatedDate = DateTime.Now;

@@ -75,7 +75,7 @@
     <!-- Header Section Begin -->
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="#"><img src="~/assets/img/Preview1.png" alt=""></a>
+            <a href="/Home/Index"><img src="~/assets/img/Preview1.png" alt=""></a>
         </div>
         <div class="humberger__menu__cart">
             <ul>
@@ -84,7 +84,26 @@
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i>Đăng nhập | Đăng ký</a>
+                <div class="header__top__right__auth">
+                    <nav class="header__menu">
+                        <ul>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>
+                                    <a class="active">@User.Identity.Name</a>
+                                    <ul class="header__menu__dropdown">
+                                        <li><a href="/Customer/Index">Thông tin cá nhân</a></li>
+                                        <li><a href="/Login/Logout">Đăng xuất</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            else
+                            {
+                                <a href="/Login/Index"><i class="fa fa-user"></i> Đăng nhập | Đăng ký</a>
+                            }
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -109,22 +128,34 @@
         <div class="header__top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <li><i class="fa fa-envelope"></i> nguyenthanh120223@gmail.com</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
+                    <div class="col-lg-6 col-md-6 ml-auto">
+                        <div class="header__top__right ">
                             <div class="header__top__right__social">
                                 <a href="https://www.facebook.com/nbthanh03"><i class="fa fa-facebook"></i></a>
                                 <a href="https://github.com/ThanhNB-NBT"><i class="fa fa-github"></i></a>
                                 <a href="https://www.linkedin.com/in/th%C3%A0nh-nguy%E1%BB%85n-255735230/"><i class="fa fa-linkedin"></i></a>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Đăng ký | Đăng nhập</a>
+                                <div class="header__top__right__auth">
+                                    <nav class="header__menu">
+                                        <ul>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <li>
+                                                    <a class="active">@User.Identity.Name</a>
+                                                    <ul class="header__menu__dropdown">
+                                                        <li><a href="/Customer/Index">Thông tin cá nhân</a></li>
+                                                        <li><a href="/Login/Logout">Đăng xuất</a></li>
+                                                    </ul>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <a href="/Login/Index"><i class="fa fa-user"></i> Đăng nhập | Đăng ký</a>
+                                            }
+                                        </ul>
+                                    </nav>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -135,7 +166,7 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="header__logo">
-                        <a href="~/index.html"><img src="~/assets/img/Preview1.png" alt=""></a>
+                        <a href="/Home/Index"><img src="~/assets/img/Preview1.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-6">

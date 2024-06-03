@@ -9,10 +9,12 @@ using LaptopShop2.Models;
 using X.PagedList;
 using System.Data;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class TbProductsController : Controller
     {
         private readonly LaptopShopContext _context;

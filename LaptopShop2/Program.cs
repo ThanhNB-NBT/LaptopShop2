@@ -23,11 +23,17 @@ builder.Services.AddDbContext<LaptopShopContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {
-                options.LoginPath = "/Login"; // Đường dẫn đến action đăng nhập
-                options.LogoutPath = "/Logout"; // Đường dẫn đến action đăng xuất
-                // Cấu hình thêm các options nếu cần
+                options.LoginPath = "/Admin/LoginAdmin"; 
+                options.LogoutPath = "/Admin/LoginAdmin/Logout"; 
+                
             });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Index";
+        options.LogoutPath = "/Login/Logout";
+    });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
@@ -74,6 +80,7 @@ app.UseEndpoints(endpoints =>
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .RequireAuthorization();
 
 app.Run();

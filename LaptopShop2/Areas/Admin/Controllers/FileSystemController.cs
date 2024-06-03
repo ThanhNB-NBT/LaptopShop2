@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using elFinder.NetCore.Drivers.FileSystem;
 using elFinder.NetCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/el-finder-file-system")]
+    [Authorize]
     public class FileSystemController(IWebHostEnvironment env) : Controller
     {
         readonly IWebHostEnvironment _env = env;
