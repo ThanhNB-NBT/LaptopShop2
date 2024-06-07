@@ -5,7 +5,7 @@ namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/file-manager")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "AdminCookie")]
     public class FileManagerController : Controller
     {
         public IActionResult Index()

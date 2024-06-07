@@ -20,16 +20,17 @@ builder.Services.AddDbContext<LaptopShopContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Admin/LoginAdmin"; 
-                options.LogoutPath = "/Admin/LoginAdmin/Logout"; 
-                
-            });
+// Scheme xác thực cho admin
+builder.Services.AddAuthentication("AdminCookie")
+    .AddCookie("AdminCookie", options =>
+    {
+        options.LoginPath = "/Admin/LoginAdmin/Index";
+        options.LogoutPath = "/Admin/LoginAdmin/Logout";
+    });
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
+// Scheme xác thực cho user
+builder.Services.AddAuthentication("UserCookie")
+    .AddCookie("UserCookie", options =>
     {
         options.LoginPath = "/Login/Index";
         options.LogoutPath = "/Login/Logout";
@@ -80,7 +81,6 @@ app.UseEndpoints(endpoints =>
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .RequireAuthorization();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

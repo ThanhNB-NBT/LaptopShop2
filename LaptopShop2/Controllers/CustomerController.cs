@@ -1,12 +1,13 @@
 ﻿using LaptopShop2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace LaptopShop2.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "UserCookie")]
     public class CustomerController : Controller
     {
         private readonly LaptopShopContext _context;
@@ -56,6 +57,33 @@ namespace LaptopShop2.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Lấy danh sách đơn hàng của khách hàng cụ thể
+            var orders = await _context.TbOrders
+                                        .Include(t => t.Customer)
+                                        .Include(t => t.OrderStatus)
+                                        .Include(t => t.TbOrderDetails)
+                                        .ThenInclude(od => od.Product)
+                                        .Where(m => m.CustomerId == id)
+                                        .ToListAsync();
+            if (orders == null || orders.Count == 0)
+            {
+                return NotFound();
+            }
+
+            var orderStatuses = await _context.TbOrderStatuses.ToListAsync();
+            ViewBag.OrderStatuses = new SelectList(orderStatuses, "OrderStatusId", "Name");
+
+            return View(orders);
         }
     }
 }

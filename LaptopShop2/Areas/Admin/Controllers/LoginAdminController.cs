@@ -51,7 +51,7 @@ namespace LaptopShop2.Areas.Admin.Controllers
             _context.TbAccounts.Add(account);
             await _context.SaveChangesAsync();
 
-            return View();
+            return View("Index");
         }
 
 
@@ -61,7 +61,7 @@ namespace LaptopShop2.Areas.Admin.Controllers
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 ModelState.AddModelError("", "Vui lòng nhập tên đăng nhập và mật khẩu.");
-                return View();
+                return View("Index");
             }
 
             var user = await _context.TbAccounts
@@ -79,7 +79,7 @@ namespace LaptopShop2.Areas.Admin.Controllers
                 new Claim("Avatar", user.Avatar ?? "")
             };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "AdminCookie");
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = true, // Lưu cookie đăng nhập ngay cả khi đóng trình duyệt
@@ -87,22 +87,22 @@ namespace LaptopShop2.Areas.Admin.Controllers
                 };
 
                 await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    "AdminCookie",
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                return RedirectToAction("Index", "Home"); // Điều hướng đến trang chủ sau khi đăng nhập thành công
+                return RedirectToAction("Index", "Home", new { area = "Admin" }); // Điều hướng đến trang chủ sau khi đăng nhập thành công
             }
             else
             {
                 ModelState.AddModelError("", "Tên đăng nhập hoặc mật khẩu không đúng.");
-                return View();
+                return View("Index");
             }
         }
 
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("AdminCookie");
             return RedirectToAction("Index", "LoginAdmin", new { area = "Admin" });
         }
     }

@@ -71,10 +71,11 @@ namespace LaptopShop2.Controllers
             {
                 new Claim(ClaimTypes.NameIdentifier, user.CustomerId.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim("FullName", user.FullName ?? "")
+                new Claim("FullName", user.FullName ?? ""),
+                new Claim("CustomerId", user.CustomerId.ToString())
             };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, "UserCookie");
                 var authProperties = new AuthenticationProperties
                 {
                     IsPersistent = true, // Lưu cookie đăng nhập ngay cả khi đóng trình duyệt
@@ -82,7 +83,7 @@ namespace LaptopShop2.Controllers
                 };
 
                 await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    "UserCookie",
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
@@ -97,8 +98,8 @@ namespace LaptopShop2.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Login");
+            await HttpContext.SignOutAsync("UserCookie");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

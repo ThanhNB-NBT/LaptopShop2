@@ -1,0 +1,35 @@
+﻿@model IPagedList<LaptopShop2.Models.TbProduct>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
+@using LaptopShop2.Functions;
+
+@foreach (var products in Model)
+{
+    string url = LaptopShop2.Functions.Function.TitleSlugGeneration("Product", products.ProductName, products.ProductId);
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="product__item">
+            <div class="product__item__pic set-bg" data-setbg="@products.Image">
+                <ul class="product__item__pic__hover">
+                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                    <li><a class="add-to-cart" data-product-id="@products.ProductId"><i class="fa fa-shopping-cart"></i></a></li>
+                </ul>
+            </div>
+            <div class="product__item__text">
+                <h6><a href="/@url">@products.ProductName</a></h6>
+                @if (products.Discount > 0)
+                {
+                    <del><span style="color: red; font-size: 16px;">@LaptopShop2.Functions.Function.FormatCurrency(products.Price)</span></del>
+                    <div class="discount-price-home">
+                        <span style="font-size:20px;" class="discounted-price-home">@LaptopShop2.Functions.Function.FormatCurrency(products.DiscountedPrice)</span>
+                    </div>
+                }
+                else
+                {
+                    <span style="font-size: 16px;">@LaptopShop2.Functions.Function.FormatCurrency(products.Price)</span>
+                }
+            </div>
+        </div>
+    </div>
+}
+

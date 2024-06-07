@@ -1,5 +1,9 @@
-﻿@model IEnumerable<LaptopShop2.Models.TbProduct>
+﻿@model IPagedList<LaptopShop2.Models.TbProduct>
+@using X.PagedList;
+@using X.PagedList.Mvc.Core;
 @using LaptopShop2.Functions;
+@using LaptopShop2.ViewModels;
+
 
 @{
     ViewData["Title"] = "Cửa hàng";
@@ -54,72 +58,83 @@
                             </div>
                         </div>
                     </div>
-                    <div class="sidebar__item sidebar__item__color--option">
-                        <h4>Colors</h4>
-                        <div class="sidebar__item__color sidebar__item__color--white">
-                            <label for="white">
-                                White
-                                <input type="radio" id="white">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--gray">
-                            <label for="gray">
-                                Gray
-                                <input type="radio" id="gray">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--red">
-                            <label for="red">
-                                Red
-                                <input type="radio" id="red">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--black">
-                            <label for="black">
-                                Black
-                                <input type="radio" id="black">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--blue">
-                            <label for="blue">
-                                Blue
-                                <input type="radio" id="blue">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__color sidebar__item__color--green">
-                            <label for="green">
-                                Green
-                                <input type="radio" id="green">
-                            </label>
-                        </div>
-                    </div>
+
+                    <!-- Thêm các tùy chọn lọc vào phần sidebar -->
                     <div class="sidebar__item">
-                        <h4>Popular Size</h4>
-                        <div class="sidebar__item__size">
-                            <label for="large">
-                                Large
-                                <input type="radio" id="large">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="medium">
-                                Medium
-                                <input type="radio" id="medium">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="small">
-                                Small
-                                <input type="radio" id="small">
-                            </label>
-                        </div>
-                        <div class="sidebar__item__size">
-                            <label for="tiny">
-                                Tiny
-                                <input type="radio" id="tiny">
-                            </label>
-                        </div>
+                        <h4>Màu sắc</h4>
+                        <ul>
+                            @foreach (var color in ViewBag.FilterOptions.Colors)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="radio" name="colorFilter" value="@color" @(color == ViewBag.SelectedColor ? "checked" : "")>
+                                        @color
+                                    </label>
+                                </li>
+                            }
+                        </ul>
                     </div>
+
+                    <div class="sidebar__item">
+                        <h4>Thương hiệu CPU</h4>
+                        <ul>
+                            @foreach (var cpuCompany in ViewBag.FilterOptions.CpuCompanies)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="radio" name="cpuCompanyFilter" value="@cpuCompany" @(cpuCompany == ViewBag.SelectedCpuCompany ? "checked" : "")>
+                                        @cpuCompany
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="sidebar__item">
+                        <h4>RAM</h4>
+                        <ul>
+                            @foreach (var ramSize in ViewBag.FilterOptions.RamSize)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="radio" name="ramSizeFilter" value="@ramSize" @(ramSize == ViewBag.SelectedRamSize ? "checked" : "")>
+                                        @ramSize
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="sidebar__item">
+                        <h4>Màn hình</h4>
+                        <ul>
+                            @foreach (var screenSize in ViewBag.FilterOptions.ScreenSizes)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="radio" name="screenSizeFilter" value="@screenSize" @(screenSize == ViewBag.SelectedScreenSize ? "checked" : "")>
+                                        @screenSize
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
+                    <div class="sidebar__item">
+                        <h4>Ổ cứng</h4>
+                        <ul>
+                            @foreach (var driveMemory in ViewBag.FilterOptions.DriveMemory)
+                            {
+                                <li>
+                                    <label>
+                                        <input type="radio" name="driveMemoryFilter" value="@driveMemory" @(driveMemory == ViewBag.SelectedDriveMemory ? "checked" : "")>
+                                        @driveMemory
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+
                     <div class="sidebar__item">
                         <div class="latest-product__text">
                             <h4>Latest Products</h4>
@@ -186,49 +201,19 @@
                     </div>
                 </div>
                 <div id="product_item" class="row">
-                    @foreach(var products in Model)
-                    {
-                    string url = Function.TitleSlugGeneration("Product", products.ProductName, products.ProductId);
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="@products.Image">
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                    <li><a class="add-to-cart" data-product-id="@products.ProductId"><i class="fa fa-shopping-cart"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="/@url">@products.ProductName</a></h6>
-                                @if (products.Discount > 0)
-                                {
-                                    <del><span style="color: red; font-size: 16px;">@Function.FormatCurrency(products.Price)</span></del>
-                                    <div class="discount-price-home">
-                                        <span class="discounted-price-home">@Function.FormatCurrency(products.DiscountedPrice)</span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <span style="font-size: 16px;">@Function.FormatCurrency(products.Price)</span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                    }
+                    @Html.Partial("ProductListPartial", Model)
                 </div>
                 <div class="product__pagination">
-                    <a href="#">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                    @Html.CustomPagedListPager(Model, page => Url.Action("Index", new { page }))
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Product Section End -->
-
+<input type="hidden" id="productListUrl" value="@Url.Action("Index", "Product")" />
 @section Scripts{
+    <script src="/assets/js/product-ajax.js"></script>
     <script>
         $(document).ready(function () {
             $('#categorySelect').change(function () {
@@ -242,6 +227,18 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        function applySetBg() {
+            $('.set-bg').each(function () {
+                var bg = $(this).data('setbg');
+                $(this).css('background-image', 'url(' + bg + ')');
+            });
+        }
+
+        $(document).ready(function () {
+            applySetBg();  // Gọi hàm applySetBg khi trang được tải xong
         });
     </script>
 }

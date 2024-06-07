@@ -8,7 +8,7 @@ namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/el-finder-file-system")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "AdminCookie")]
     public class FileSystemController(IWebHostEnvironment env) : Controller
     {
         readonly IWebHostEnvironment _env = env;

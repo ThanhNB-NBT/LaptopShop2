@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace LaptopShop2.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "AdminCookie")]
     public class TbContactsController : Controller
     {
         private readonly LaptopShopContext _context;

@@ -1,0 +1,116 @@
+﻿@model List<LaptopShop2.Models.TbOrder>
+@using LaptopShop2.Functions;
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng của khách hàng";
+}
+
+<div class="container-fluid">
+    <h2>Chi tiết đơn hàng của khách hàng</h2>
+    <h4>Khách hàng: @Model.First().Customer.FullName</h4>
+    <dl class="row">
+        <dt class="col-sm-2">
+            Email:
+        </dt>
+        <dd class="col-sm-10">
+            @Model.First().Customer.Email
+        </dd>
+        <dt class="col-sm-2">
+            Địa chỉ:
+        </dt>
+        <dd class="col-sm-10">
+            @Model.First().Customer.Address
+        </dd>
+    </dl>
+
+    @foreach (var order in Model.OrderByDescending(o => o.CreatedDate))
+    {
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Đơn hàng # @order.OrderId - @order.CreatedDate?.ToString("dd/MM/yyyy")</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Mã đơn hàng:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @Html.DisplayFor(modelItem => order.Code)
+                    </dd>
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Người nhận:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @Html.DisplayFor(modelItem => order.CustomerName)
+                    </dd>
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Điện thoại:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @Html.DisplayFor(modelItem => order.Phone)
+                    </dd>
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Địa chỉ:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @Html.DisplayFor(modelItem => order.Address)
+                    </dd>
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Thời gian mua:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @Html.DisplayFor(modelItem => order.CreatedDate)
+                    </dd>
+                    <dt class="col-sm-2 fw-semibold border-bottom-0">
+                        Trạng thái đơn hàng:
+                    </dt>
+                    <dd class="col-sm-10 fw-semibold border-bottom-0">
+                        @order.OrderStatus?.Name
+                    </dd>
+                </dl>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h5 class="fw-semibold mb-3">Danh sách sản phẩm</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th class="fw-semibold text-center align-middle">Hình ảnh</th>
+                                        <th class="fw-semibold text-center align-middle">Tên sản phẩm</th>
+                                        <th class="fw-semibold text-center align-middle">Giá</th>
+                                        <th class="fw-semibold text-center align-middle">Số lượng</th>
+                                        <th class="fw-semibold text-center align-middle">Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int i = 1;
+                                    }
+                                    @foreach (var orderDetail in order.TbOrderDetails)
+                                    {
+                                        <tr>
+                                            <td style="text-center align-middle">@(i++)</td>
+                                            <td class="text-center align-middle">
+                                                <img src="@orderDetail.Product?.Image" alt="@orderDetail.Product?.ProductName" class="img-fluid" style="max-width: 125px; max-height: 50px;" />
+                                            </td>
+                                            <td>@orderDetail.Product?.ProductName</td>
+                                            <td>@Function.FormatCurrency(orderDetail.Product?.DiscountedPrice ?? 0)</td>
+                                            <td>@orderDetail.Quantity</td>
+                                            <td class="text-right">@Function.FormatCurrency((decimal)((orderDetail.Product?.DiscountedPrice ?? 0) * orderDetail.Quantity))</td>
+                                        </tr>
+                                    }
+                                    <tr>
+                                        <td colspan="5" class="text-right fw-bold">Tổng cộng:</td>
+                                        <td class="text-right fw-bold">@Function.FormatCurrency(order.TotalAmount ?? 0)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

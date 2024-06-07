@@ -89,10 +89,19 @@
                         <ul>
                             @if (User.Identity.IsAuthenticated)
                             {
+                                var customerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "CustomerId");
+                                string customerId = customerIdClaim != null ? customerIdClaim.Value : string.Empty;
+
                                 <li>
                                     <a class="active">@User.Identity.Name</a>
                                     <ul class="header__menu__dropdown">
-                                        <li><a href="/Customer/Index">Thông tin cá nhân</a></li>
+                                        <li><a style="padding: 5px !important;" href="/Customer/Index">Cá nhân</a></li>
+
+                                        @if (!string.IsNullOrEmpty(customerId))
+                                        {
+                                            <li><a href="@Url.Action("Detail", "Customer", new { id = customerId })">Đơn hàng</a></li>
+                                        }
+
                                         <li><a href="/Login/Logout">Đăng xuất</a></li>
                                     </ul>
                                 </li>
@@ -129,7 +138,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 ml-auto">
-                        <div class="header__top__right ">
+                        <div class="header__top__right" style="height: 50px;">
                             <div class="header__top__right__social">
                                 <a href="https://www.facebook.com/nbthanh03"><i class="fa fa-facebook"></i></a>
                                 <a href="https://github.com/ThanhNB-NBT"><i class="fa fa-github"></i></a>
@@ -137,14 +146,23 @@
                             </div>
                             <div class="header__top__right__auth">
                                 <div class="header__top__right__auth">
-                                    <nav class="header__menu">
+                                    <nav class="header__menu" style="padding: 10px;">
                                         <ul>
                                             @if (User.Identity.IsAuthenticated)
                                             {
+                                                var customerIdClaim = User.Claims.FirstOrDefault(c => c.Type == "CustomerId");
+                                                string customerId = customerIdClaim != null ? customerIdClaim.Value : string.Empty;
+
                                                 <li>
                                                     <a class="active">@User.Identity.Name</a>
                                                     <ul class="header__menu__dropdown">
-                                                        <li><a href="/Customer/Index">Thông tin cá nhân</a></li>
+                                                        <li><a style="padding: 5px !important;" href="/Customer/Index">Cá nhân</a></li>
+
+                                                        @if (!string.IsNullOrEmpty(customerId))
+                                                        {
+                                                            <li><a href="@Url.Action("Detail", "Customer", new { id = customerId })">Đơn hàng</a></li>
+                                                        }
+
                                                         <li><a href="/Login/Logout">Đăng xuất</a></li>
                                                     </ul>
                                                 </li>
